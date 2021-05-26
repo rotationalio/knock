@@ -14,6 +14,7 @@ func main() {
 	}
 	parent := fmt.Sprintf("projects/%s", projectID)
 	secret_id := "test"
+	duration := int64(60) // in seconds
 	payload := []byte("my super secret data")
 
 	// Knock to check if our permission level will let us connect
@@ -31,8 +32,8 @@ func main() {
 		knock.DeleteSecret(secret)
 	}
 
-	// Create a new secret
-	secretPath, err := knock.CreateSecret(parent, secret_id)
+	// Create a new secret that expires after duration
+	secretPath, err := knock.CreateSecret(parent, secret_id, duration)
 	if err != nil {
 		panic(fmt.Sprintln("Something went wrong; check if secret already exists!", err))
 	}

@@ -8,6 +8,7 @@ import (
 	secretmanager "cloud.google.com/go/secretmanager/apiv1"
 	"google.golang.org/api/iterator"
 	secretmanagerpb "google.golang.org/genproto/googleapis/cloud/secretmanager/v1"
+	"google.golang.org/protobuf/types/known/durationpb"
 )
 
 // Knock checks to make sure we can create a new client.
@@ -39,7 +40,7 @@ func Knock(parent string) error {
 // and an error if any occurs.
 // Note: A secret is a logical wrapper around a collection of secret versions.
 // Secret versions hold the actual secret material.
-func CreateSecret(parent, secretID string) (string, error) {
+func CreateSecret(parent string, secretID string, expiration int64) (string, error) {
 
 	// Create the client.
 	ctx := context.Background()
@@ -60,6 +61,11 @@ func CreateSecret(parent, secretID string) (string, error) {
 			Replication: &secretmanagerpb.Replication{
 				Replication: &secretmanagerpb.Replication_Automatic_{
 					Automatic: &secretmanagerpb.Replication_Automatic{},
+				},
+			},
+			Expiration: &secretmanagerpb.Secret_Ttl{
+				Ttl: &durationpb.Duration{
+					Seconds: expiration,
 				},
 			},
 		},
