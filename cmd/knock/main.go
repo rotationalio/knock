@@ -51,4 +51,12 @@ func main() {
 	}
 	// Note - just for demo; don't actually print out secrets in practice!
 	fmt.Printf("found your secret: %s\n", retrieved)
+
+	// Retrieve payload for the latest version
+	latest, err := knock.AccessSecretVersion(fmt.Sprintf("%s/%s/%s", secretPath, "versions", "latest"))
+	if err != nil {
+		panic(fmt.Sprintln("Couldn't retrieve secret; check service account permissions!", err))
+	}
+	// Note - just for demo; don't actually print out secrets in practice!
+	fmt.Printf("found your secret: %s\n", latest)
 }
