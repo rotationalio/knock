@@ -2,12 +2,32 @@ package knock
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	secretmanager "cloud.google.com/go/secretmanager/apiv1"
 	"google.golang.org/api/iterator"
 	secretmanagerpb "google.golang.org/genproto/googleapis/cloud/secretmanager/v1"
 )
+
+// Knock checks to make sure we can create a new client.
+// This validates IAM permissions to some extent.
+func Knock(parent string) error {
+
+	// Create the client.
+	ctx := context.Background()
+	client, err := secretmanager.NewClient(ctx)
+	if err != nil {
+		switch err.Error() {
+		case "google: could not find default credentials. See https://developers.google.com/accounts/docs/application-default-credentials for more information.":
+			return errors.New("service account doesn't have permissions to create client")
+		default:
+			return err
+		}
+	}
+	client.Close()
+	return nil
+}
 
 // CreateSecret creates a new secret in the Google Cloud Manager top-
 // level directory, specified as `parent`, using the `secretID` provided

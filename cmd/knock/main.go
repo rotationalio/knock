@@ -16,6 +16,12 @@ func main() {
 	secret_id := "test"
 	payload := []byte("my super secret data")
 
+	// Knock to check if our permission level will let us connect
+	err := knock.Knock(parent)
+	if err != nil {
+		panic(fmt.Sprintln("Something went wrong; you don't seem to have access to the project: ", err))
+	}
+
 	// Get existing secrets (if any)
 	secrets, _ := knock.ListSecrets(parent)
 
@@ -28,7 +34,7 @@ func main() {
 	// Create a new secret
 	secretPath, err := knock.CreateSecret(parent, secret_id)
 	if err != nil {
-		panic(fmt.Sprintln("Something went wrong; check credentials/if secret already exists!", err))
+		panic(fmt.Sprintln("Something went wrong; check if secret already exists!", err))
 	}
 
 	// Add a new secret version with the payload
