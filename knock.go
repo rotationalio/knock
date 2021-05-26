@@ -32,7 +32,8 @@ func Knock(parent string) error {
 
 // CreateSecret creates a new secret in the Google Cloud Manager top-
 // level directory, specified as `parent`, using the `secretID` provided
-// as the name. The parent should be a path, e.g.
+// as the name, to expire after `expiration` seconds.
+// The parent should be a path, e.g.
 //     "projects/project-name"
 // This function returns a string representation of the path where the
 // new secret is stored, e.g.
