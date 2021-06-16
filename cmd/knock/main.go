@@ -12,6 +12,7 @@ func main() {
 	if !ok {
 		panic(fmt.Sprintln("project name not found; check that environment variable is set"))
 	}
+
 	parent := fmt.Sprintf("projects/%s", projectID)
 	secret_id := "test"
 	duration := int64(60) // in seconds
